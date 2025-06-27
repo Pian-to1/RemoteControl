@@ -1,1 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:background="@color/grey"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:text="@string/app_name"
+        android:textSize="20sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/app_name">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:orientation="vertical">
+
+<!--            <TextView-->
+<!--                android:id="@+id/tv_bt"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="20dp"-->
+<!--                android:text="蓝牙设备"/>-->
+
+            <ImageView
+                android:id="@+id/iv_bt"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_bt"
+                android:padding="10dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bt_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:orientation="vertical">
+
+<!--            <TextView-->
+<!--                android:id="@+id/tv_wifi"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_centerHorizontal="true"-->
+<!--                android:layout_margin="20dp"-->
+<!--                android:text="局域网设备"/>-->
+
+            <ImageView
+                android:id="@+id/iv_wifi"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_wifi"
+                android:padding="10dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/wifi_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--    <RelativeLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:padding="15dp"-->
+    <!--        android:layout_alignParentBottom="true">-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/scan_button"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:gravity="center"-->
+    <!--            android:textSize="20sp"-->
+    <!--            android:text="扫描设备"/>-->
+    <!--    </RelativeLayout>-->
+
+</RelativeLayout>

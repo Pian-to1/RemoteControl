@@ -112,7 +112,7 @@ public class HidReceiverService extends Service {
                 .build();
 
         AdvertiseData data = new AdvertiseData.Builder()
-                .setIncludeDeviceName(true)  // 包含设备名
+                .setIncludeDeviceName(false)  // 包含设备名
                 .addServiceUuid(new ParcelUuid(MY_UUID))  // 服务UUID
                 .build();
         Log.i(TAG, "startAdvertising Service UUID =" + MY_UUID.toString());

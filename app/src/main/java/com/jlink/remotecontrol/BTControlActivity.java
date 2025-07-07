@@ -64,7 +64,7 @@ public class BTControlActivity extends AppCompatActivity {
             }
 
             connectedDevice = bluetoothAdapter.getRemoteDevice(connectedDeviceAddress);
-            bt_status.setText(connectedDeviceName);
+            bt_status.setText(connectedDeviceAddress);
             bt_status.setTextColor(Color.GREEN);
             connectToDevice(connectedDevice);
         }
@@ -73,7 +73,7 @@ public class BTControlActivity extends AppCompatActivity {
         TextView device_info = findViewById(R.id.device_info);
 
         Log.d(TAG, "connectedDevice.getUuids() = " + connectedDevice.getUuids());
-        device_info.setText("SN : " + "***\nmac : " + connectedDeviceAddress
+        device_info.setText("model : " + connectedDevice.getName()
                 + "\nuuid : " + MY_UUID.toString());
 
         bt_status.setOnClickListener(v -> {

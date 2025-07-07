@@ -42,12 +42,12 @@ public class WifiControlActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void initView() {
         TextView bt_status = findViewById(R.id.bt_status);
-        bt_status.setText(model);
+        bt_status.setText(mac);
         bt_status.setTextColor(Color.GREEN);
 
         RelativeLayout info = findViewById(R.id.info);
         TextView device_info = findViewById(R.id.device_info);
-        device_info.setText("SN : " + sn + "\nmac : " + mac + "\nip : "
+        device_info.setText("SN : " + sn + "\nmodel : " + model + "\nip : "
                 + udpBroadcastSender.IP + "\nport : " + udpBroadcastSender.PORT);
 
         bt_status.setOnClickListener(v -> {

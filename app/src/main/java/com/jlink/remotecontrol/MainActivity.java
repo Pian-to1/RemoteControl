@@ -17,6 +17,7 @@ import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "RemoteControl -- " + MainActivity.class.getSimpleName();
     public final UUID MY_UUID = UUID.fromString("a0147dfb-08c0-41ce-baa5-3e10b692a340");
     private BluetoothAdapter mBtAdapter;
+    private BluetoothLeScanner scanner;
 
     private List<BluetoothDevice> btList;
     private BTDeviceAdapter btDeviceAdapter;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_main);
 
         mContext = this;
@@ -65,16 +68,6 @@ public class MainActivity extends AppCompatActivity {
         bt_view.setLayoutManager(new LinearLayoutManager(mContext));
         bt_view.setAdapter(btDeviceAdapter);
 
-        BluetoothManager bluetoothManager = (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
-        mBtAdapter = bluetoothManager.getAdapter();
-        BluetoothLeScanner scanner = mBtAdapter.getBluetoothLeScanner();
-        ScanSettings settings = new ScanSettings.Builder()
-                .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
-                .build();
-        List<ScanFilter> filters = new ArrayList<>();
-        filters.add(new ScanFilter.Builder()
-                .setServiceUuid(new ParcelUuid(MY_UUID))
-                .build());
 
         //wifi列表
         wifiList = new ArrayList<>();
@@ -83,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         wifi_view.setAdapter(wifiDeviceAdapter);
 
         udpBroadcastSender = new UdpBroadcastSender();
-        mNsdManager = (NsdManager) mContext.getSystemService(Context.NSD_SERVICE);
+
 
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
             String[] permissions = {
@@ -93,15 +86,33 @@ public class MainActivity extends AppCompatActivity {
             };
             if (ContextCompat.checkSelfPermission(mContext, permissions[0]) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, permissions, 100);
-                return;
             }
         }
 
-        Log.d(TAG, "startScan-----");
-        scanner.startScan(filters, settings, scanCallback);
+        BluetoothManager bluetoothManager = (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
+        mBtAdapter = bluetoothManager.getAdapter();
+        if (!mBtAdapter.isEnabled()) {
+            Toast.makeText(mContext,"请打开蓝牙", Toast.LENGTH_SHORT).show();
+        }
+        scanner = mBtAdapter.getBluetoothLeScanner();
 
+        ScanSettings settings = new ScanSettings.Builder()
+                .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+                .build();
+        List<ScanFilter> filters = new ArrayList<>();
+        filters.add(new ScanFilter.Builder()
+                .setServiceUuid(new ParcelUuid(MY_UUID))
+                .build());
+
+        if (scanner != null) {
+            Log.d(TAG, "startScan-----");
+            scanner.startScan(filters, settings, scanCallback);
+        }
+
+        mNsdManager = (NsdManager) mContext.getSystemService(Context.NSD_SERVICE);
         Log.d(TAG, "discoverServices-----");
         mNsdManager.discoverServices("_http._tcp.", NsdManager.PROTOCOL_DNS_SD, discoveryListener);
+
     }
 
     private final NsdManager.DiscoveryListener discoveryListener = new NsdManager.DiscoveryListener() {
@@ -177,4 +188,17 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Log.d(TAG, "onBackPressed");
+
+        finish();
+        if (scanner != null) {
+            scanner.stopScan(scanCallback);
+        }
+        if (mNsdManager != null) {
+            mNsdManager.stopServiceDiscovery(discoveryListener);
+        }
+    }
 }
